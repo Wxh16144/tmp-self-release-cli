@@ -6,6 +6,7 @@ import mri from "mri";
 import terminalLink from 'terminal-link';
 import { Argv } from "./type";
 import { run } from './main'
+import prompts from 'prompts'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const resolvePath = (...arg: any[]) => path.resolve(__dirname, '..', ...arg);
@@ -45,4 +46,42 @@ async function main(args: Argv = argv) {
  run(args)
 }
 
-export default main;
+async function main2(){
+  // input preid
+  // select major, minor, patch
+
+  const response = await prompts([
+    {
+      type: 'text',
+      name: 'preid',
+      message: '选择一个预发布标识符:',
+      initial: 'mac'
+    },
+    {
+      type: 'select',
+      name: 'value',
+      message: '选择一个版本类型:',
+      choices: [
+        { title: 'Major', value: 0 },
+        { title: 'Minor', value: 1 },
+        { title: 'Patch', value: 2 }
+      ],
+      initial: 1
+    }
+  ]);
+
+  // 如果是 ctrl + c 退出
+  if(Object.keys(response).length !== 2) process.exit(0);
+
+  const config = {
+    preid: response.preid,
+    major: response.value === 0,
+    minor: response.value === 1,
+    patch: response.value === 2,
+  }
+  
+  run(config as any)
+
+}
+export default main2
+// export default main;
