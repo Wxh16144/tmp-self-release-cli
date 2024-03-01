@@ -5,6 +5,7 @@ import c from "kleur";
 import mri from "mri";
 import terminalLink from 'terminal-link';
 import { Argv } from "./type";
+import { run } from './main'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const resolvePath = (...arg: any[]) => path.resolve(__dirname, '..', ...arg);
@@ -15,6 +16,11 @@ const command = Object.keys(pkg.bin ?? {})[0] ?? pkg.name;
 
 const argv = mri<Argv>(process.argv.slice(2), {
   alias: { h: 'help', v: 'version' },
+  boolean: [
+    'major',
+    'minor',
+    'patch',
+  ]
 });
 
 async function main(args: Argv = argv) {
@@ -36,7 +42,7 @@ async function main(args: Argv = argv) {
     return;
   }
 
-  console.log(`Welcome ${c.green(pkg.name)}`);
+ run(args)
 }
 
 export default main;

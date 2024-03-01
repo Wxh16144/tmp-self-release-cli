@@ -4,4 +4,8 @@ export interface Argv {
   help?: boolean;
   version?: boolean;
   _: string[];
+  major?: boolean;
+  minor?: boolean;
+  patch?: boolean;
+  preid?: string;
 }
